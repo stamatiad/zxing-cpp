@@ -30,7 +30,11 @@ class CMakeBuild(build_ext):
 		else:
 			cmake_args += [f'-DCMAKE_BUILD_TYPE={cfg}']
 
+		print(f"Making tmp dir: {self.build_temp}")
 		os.makedirs(self.build_temp, exist_ok=True)
+		print(f"Calling cmake:")
+		print(f"{['cmake', ext.sourcedir] + cmake_args}")
+		print(f"{['cmake', '--build', '.'] + build_args}")
 		subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp)
 		subprocess.check_call(['cmake', '--build', '.'] + build_args, cwd=self.build_temp)
 

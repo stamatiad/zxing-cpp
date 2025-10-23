@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.18)
 project(ZXingPython)
+message("CONFIGURING PYTHON BINDINGS!")
 
 # check if we are called from the top-level ZXing project
 get_directory_property(hasParent PARENT_DIRECTORY)
 if (NOT hasParent)
     # Build with C++20 by default (which enables position independent DataMatrix detection).
-    set(CMAKE_CXX_STANDARD 20)
+    set(CMAKE_CXX_STANDARD 17)
     set(CMAKE_CXX_EXTENSIONS OFF)
     # Allow the fallback to earlier versions if the compiler does not support it.
     set(CMAKE_CXX_STANDARD_REQUIRED OFF)
@@ -17,7 +18,7 @@ if (NOT hasParent)
     option (ZXING_EXPERIMENTAL_API "Build with experimental API" ON)
     option (ZXING_USE_BUNDLED_ZINT "Use the bundled libzint for barcode creation/generation" ON)
 
-    set(CORE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/core)
+    set(CORE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../../core)
     if(IS_SYMLINK ${CORE_PATH})
         # This is needed because otherwise GCC resolves the symlink which causes paths to randomly
         # be prefixed by /core or by /wrappers/python/core depending on include order.
@@ -26,7 +27,7 @@ if (NOT hasParent)
 
     if(EXISTS ${CORE_PATH})
         add_subdirectory(${CORE_PATH} ZXing EXCLUDE_FROM_ALL)
-        include(${CMAKE_CURRENT_SOURCE_DIR}/zxing.cmake)
+        include(${CMAKE_CURRENT_SOURCE_DIR}/../../zxing.cmake)
     else()
         message(FATAL_ERROR "Unable to locate zxing source code")
     endif()
